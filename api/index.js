@@ -1,33 +1,16 @@
-const express = require("express");
-const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
-const authRoute = require("./routes/auth");
-const userRoute = require("./routes/users");
-const movieRoute = require("./routes/movies");
-const listRoute = require("./routes/lists");
-const app = express();
+const app = require('./src/app');
+const pool = require('./src/pool');
 const PORT = process.env.PORT || 8800;
 
-// removes mongoose warning
-mongoose.set('strictQuery', true);
-
-const connect = async () => {
-    try {
-        await mongoose.connect(process.env.MONGO_URI);
-        console.log("Connected to DB");
-    } catch (err) {
-        console.log(err);
-    }
-};
-
-app.use(express.json());
-app.use("/api/auth", authRoute);
-app.use("/api/users", userRoute);
-app.use("/api/movies", movieRoute);
-app.use("/api/lists", listRoute);
-
-app.listen(PORT, () => {
-    connect();
-    console.log("Backend server is running!");
-});
-
+pool.connect({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD
+}).then(() => {
+    app().listen(PORT, () => {
+        console.log(`Listening on port ${PORT}`);
+    });
+}).catch((err) => console.error(err));
