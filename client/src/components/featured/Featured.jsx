@@ -2,6 +2,7 @@ import './featured.scss';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import PlayArrow from '@mui/icons-material/ArrowDropDown';
 import lotr from '../../img/lotr.png';
+
 function Featured({type}) {
   return (
     <div className='featured'>
