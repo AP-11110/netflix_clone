@@ -16,7 +16,7 @@ class MovieRepo {
     static async insert(movie) {
         const { title, about, img, imgTitle, imgSm, trailer, video, year, ageLimit, genre, isSeries } = movie;
         const { rows } = await pool.query
-            (`INSERT INTO users (title, about, img, imgTitle, imgSm, trailer, video, year, ageLimit, genre, isSeries) 
+            (`INSERT INTO movies (title, about, img, imgtitle, imgsm, trailer, video, year, agelimit, genre, isseries) 
             VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) 
             RETURNING *;`
             , [title, about, img, imgTitle, imgSm, trailer, video, year, ageLimit, genre, isSeries]);
@@ -48,35 +48,37 @@ class MovieRepo {
         return rows[0];
     }
 
-    static async getRandomMovie(isSeries) {
+    static async getRandomMovie(type) {
          const { rows } = await pool.query(`
                 SELECT * FROM movies
-                WHERE isSeries = $1
+                WHERE isseries = $1
                 ORDER BY random()
                 LIMIT 1;
-            `, [isSeries])
+            `, [type])
         return rows[0];
     }
 
-    static async getRandomMovies(isSeries, genreQuery) {
+    static async getRandomMovies(typeQuery, genreQuery) {
         let list;
         if(genreQuery) {
             list = await pool.query(`
                 SELECT * FROM movies
-                WHERE isSeries = $1 AND genre = $2
+                WHERE isseries = $1 AND genre = $2
                 ORDER BY random()
                 LIMIT 10;
-            `, [isSeries, genreQuery]);
+            `, [typeQuery, genreQuery]);
         } else {
             list = await pool.query(`
                 SELECT * FROM movies
-                WHERE isSeries = $1
+                WHERE isseries = $1
                 ORDER BY random()
                 LIMIT 10;
-            `, [isSeries]);
+            `, [typeQuery]);
         }
 
         return list.rows;
     }
 }
+
+module.exports = MovieRepo;
 

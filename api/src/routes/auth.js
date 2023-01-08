@@ -23,7 +23,7 @@ router.post("/login", async (req, res) => {
         const isCorrect = await bcrypt.compare(req.body.password, user.password);
         if(!isCorrect) res.status(401).json("Wrong password or username");
         else {
-            const accessToken = jwt.sign({ id: user.id, isAdmin: user.isAdmin }, process.env.SECRET_KEY, { expiresIn: "5d" });
+            const accessToken = jwt.sign({ id: user.id, isAdmin: user.isadmin }, process.env.SECRET_KEY, { expiresIn: "5d" });
             // excluding password from response
             const { password, ...info } = user;
             res.status(200).json({...info, accessToken});

@@ -36,6 +36,7 @@ router.delete("/:id", verifyToken, async (req, res) => {
 
 // get
 router.get("/find/:id", async (req, res) => {
+    
     try {
         const user = await UserRepo.findById(req.params.id);
         const { password, ...info } = user;

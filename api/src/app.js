@@ -1,15 +1,16 @@
 const express = require('express');
-const authRoute = require("./routes/auth");
-const userRoute = require("./routes/users");
-const movieRoute = require("./routes/movies");
-
+const authRoute = require('./routes/auth');
+const userRoute = require('./routes/users');
+const movieRoute = require('./routes/movies');
+const listRoute = require('./routes/lists');
 module.exports = () => {
     const app = express();
 
     app.use(express.json());
-    app.use(authRoute);
-    app.use(userRoute);
-    app.use(movieRoute);
+    app.use("/api/auth", authRoute);
+    app.use("/api/users", userRoute);
+    app.use("/api/movies", movieRoute);
+    app.use("/api/lists", listRoute);
     
     return app;
 }
