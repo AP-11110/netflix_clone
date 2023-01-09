@@ -1,5 +1,5 @@
 const pool = require('../pool');
-
+const { randomBytes } = require('crypto');
 class UserRepo {
     // if query provided retrieve most recent users (limit by count if provided else default to 10)
     // otherwise retrieve all users
@@ -23,11 +23,22 @@ class UserRepo {
         return rows[0];
     }
 
+    static async findByEmail(email) {
+        const { rows } = await pool.query('SELECT * FROM users WHERE email = $1;', [email]);
+        return rows[0];
+    }
+
     static async insert(user) {
+        
         const { username, email, password, profilePic, isAdmin } = user;
+
+        // temp fix, username field need to be implemented
+        const randomUsername = randomBytes(4).toString('hex');
+        
         const { rows } = await pool.query
-            ('INSERT INTO users (username, email, password, profilePic, isAdmin) VALUES($1, $2, $3, $4, $5) RETURNING *;'
-            , [username, email, password, profilePic, isAdmin]);
+            ('INSERT INTO users (username, email, password, profilepic, isadmin) VALUES($1, $2, $3, $4, $5) RETURNING *;'
+            , [randomUsername, email, password, profilePic, isAdmin]);
+        
         return rows[0];
     }
 

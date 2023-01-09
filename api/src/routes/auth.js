@@ -11,14 +11,15 @@ router.post("/register", async (req, res) => {
         const user = await UserRepo.insert({ ...req.body, password: hash });
         res.status(201).json(user);
     } catch (err) {
+        console.log(err)
         res.status(500).json(err);
     }
 });
 
 router.post("/login", async (req, res) => {
     try {
-        const user = await UserRepo.findByUsername(req.body.username);
-        if(!user) res.status(401).json("Wrong password or username");
+        const user = await UserRepo.findByEmail(req.body.email);
+        if(!user) res.status(401).json("Wrong password or email");
         
         const isCorrect = await bcrypt.compare(req.body.password, user.password);
         if(!isCorrect) res.status(401).json("Wrong password or username");

@@ -2,12 +2,14 @@ import './navbar.scss';
 import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
 import Notifications from '@mui/icons-material/Notifications';
 import Search from '@mui/icons-material/Search';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../context/authContext/AuthContext';
+import { logout } from '../../context/authContext/AuthActions';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-
+  const { dispatch } = useContext(AuthContext);
   // tracking scrolling, if at the very top background black, otherwise transparent
   window.onscroll = () => {
     setIsScrolled(window.pageYOffset === 0 ? false : true);
@@ -45,7 +47,7 @@ const Navbar = () => {
                     <ArrowDropDown className="icon" />
                     <div className="options">
                         <span>Settings</span>
-                        <span>Logout</span>
+                        <span onClick={() => dispatch(logout())}>Logout</span>
                     </div>
                 </div>
             </div>

@@ -2,8 +2,24 @@ import './featured.scss';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import PlayArrow from '@mui/icons-material/ArrowDropDown';
 import lotr from '../../img/lotr.png';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function Featured({type}) {
+  const [content, setContent] = useState({});
+
+  useEffect(() => {
+    const getRandomContent = async () => {
+        try {
+            const res = await axios.get(`/movies/random${type ? `?type=${type}` : ''}`);
+            setContent(res.data);
+        } catch (err) {
+            console.log(err)
+        }
+    };
+    getRandomContent();
+  }, [type]);
+
   return (
     <div className='featured'>
         {type && (
@@ -28,7 +44,7 @@ function Featured({type}) {
             </div>
         )}
         <img
-            src="https://images.pexels.com/photos/6899260/pexels-photo-6899260.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+            src={content.img}
             alt=""
         />
         <div className="info">
@@ -37,10 +53,7 @@ function Featured({type}) {
             alt=""
             />
             <span className='desc'>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae
-                adipisci repellendus eum quasi illo, velit numquam, maxime tempora
-                sint deleniti, aliquid qui? Facilis, adipisci! Ratione hic repudiandae
-                temporibus eum earum?
+                {content.about}
             </span>
             <div className="buttons">
                 <button className='play'>

@@ -44,7 +44,6 @@ router.delete("/:id", verifyToken, async (req, res) => {
 // get
 router.get("/find/:id", async (req, res) => {
     try {
-        
         const movie = await MovieRepo.findById(req.params.id);
         res.status(200).json(movie);
     } catch (err) {
