@@ -5,7 +5,7 @@ import ListItem from '../listItem/ListItem';
 import { useRef } from 'react';
 import { useState } from 'react';
 
-function List() {
+function List({list}) {
   const [slideNumber, setSlideNumber] = useState(0);
   const [isMoved, setIsMoved] = useState(false);
   const listRef = useRef();
@@ -25,20 +25,14 @@ function List() {
   }
   return (
     <div className='list'>
-        <span className='listTitle'>Continue to watch</span>
+        <span className='listTitle'>{list[0].name}</span>
         <div className="wrapper">
             <ArrowBackIosOutlined style={{ display: !isMoved && "none"}} className='sliderArrow left' onClick={() => handleClick('left')}/>
             <div className="container" ref={listRef}>
+                {list.map((item, i) => (
+                  <ListItem index={i} item={item} />
+                ))}
                 <ListItem index={0} />
-                <ListItem index={1} />
-                <ListItem index={2} />
-                <ListItem index={3} />
-                <ListItem index={4} />
-                <ListItem index={5} />
-                <ListItem index={6} />
-                <ListItem index={7} />
-                <ListItem index={8} />
-                <ListItem index={9} />
             </div>
             <ArrowForwardIosOutlined className='sliderArrow right' onClick={() => handleClick('right')}/>
         </div>

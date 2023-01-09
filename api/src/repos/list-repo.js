@@ -6,7 +6,7 @@ class ListRepo {
     static async insert(list) {
         const { title, type, genre } = list;
         const { rows } = await pool.query
-            (`INSERT INTO lists (title, type, genre) 
+            (`INSERT INTO lists (name, type, genre) 
             VALUES($1, $2, $3) 
             RETURNING *;`
             , [title, type, genre]);
@@ -25,10 +25,12 @@ class ListRepo {
         const { rows } = await pool.query(`
             INSERT INTO movie_list (list_id, movie_id)
             VALUES($1, $2)
-            RETURNING *;`, [listId, movieId])
+            RETURNING *;`, [listId, movieId]);
+
+        return rows[0];
     }
 
-    static async getRandomMovies(typeQuery, genreQuery) {
+    static async getRandomLists(typeQuery, genreQuery) {
         let list;
         if(genreQuery) {
             list = await pool.query(`

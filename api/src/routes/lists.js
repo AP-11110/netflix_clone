@@ -19,6 +19,7 @@ router.post("/movie", verifyToken, async (req, res) => {
     if(req.user.isAdmin) {
         try {
             const savedMovieList = await ListRepo.movieList(req.body);
+            console.log(savedMovieList)
             res.status(201).json(savedMovieList);
         } catch (err) {
             res.status(500).json(err);
@@ -42,7 +43,7 @@ router.delete("/:id", verifyToken, async (req, res) => {
 
 // get 
 router.get("/", verifyToken, async (req, res) => {
-    const type = req.query.type === 'series' ? true : false;
+    const type = req.query.type === 'series' ? 'series' : 'movies';
     const genreQuery = req.query.genre;
     if(req.user.isAdmin) {
         try {

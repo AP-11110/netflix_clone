@@ -11,8 +11,22 @@ const Home = ({type}) => {
   useEffect(() => {
     const getRandomLists = async () => {
       try {
-        const res = await axios.get(`/movies/random/list${type ? "?type=" + type : ""}${genre ? "&genre=" + genre : ""}`);
-        setLists(res.data);
+        const res = await axios.get(`/lists${type ? "?type=" + type : ""}${genre ? "&genre=" + genre : ""}`, {
+          headers: {
+            token: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNjczMTk2MTYwLCJleHAiOjE2NzM2MjgxNjB9.M4E1pyFGHgSOPCTNSWTicaZPaqcMfq_LmCehsrSu3us",
+          }
+        });
+        // grouping rows into categories
+        const lists = res.data.reduce((prev, curr) => {
+          if(prev[curr.name]) {
+            prev[curr.name].push(curr);
+          } else {
+            prev[curr.name] = [curr];
+          }
+          return prev;
+        }, {})
+
+        setLists(Object.values(lists));
       } catch (err) {
         console.log(err);
       }
